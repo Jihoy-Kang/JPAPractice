@@ -17,9 +17,6 @@ public class ItemDto {
 
         private String body;
 
-        private Location fromLocation;
-
-        private Location toLocation;
     }
 
     @Getter
@@ -34,11 +31,6 @@ public class ItemDto {
 
         private String body;
 
-        private Location fromLocation;
-
-        private Location toLocation;
-
-
     }
 
     @Getter
@@ -52,9 +44,6 @@ public class ItemDto {
 
         private String body;
 
-        private Location fromLocation;
-
-        private Location toLocation;
 
     }
 }
