@@ -2,6 +2,7 @@ package com.courseori.server.item.entity;
 
 
 import com.courseori.server.location.Location;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,8 +29,12 @@ public class Item {
 
     private String body;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-    private List<Participants> participants = new ArrayList<>();
+//    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+//    private List<Participants> participants = new ArrayList<>();
 
 
+    public Item(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
 }

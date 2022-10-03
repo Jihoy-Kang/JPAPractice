@@ -17,8 +17,8 @@ import java.util.List;
 @RequestMapping("/v1/items")
 public class ItemController {
 
-    ItemService itemService;
-    ItemMapper itemMapper;
+    private final ItemService itemService;
+    private final ItemMapper itemMapper;
 
     public ItemController(ItemService itemService, ItemMapper mapper) {
         this.itemService = itemService;
