@@ -13,6 +13,15 @@ public class MemberDto {
         private String phone;
     }
 
+    @Getter
+    @AllArgsConstructor
+    public static class Patch{
+        private long memberId;
+        private String email;
+        private String name;
+        private String phone;
+    }
+
     @AllArgsConstructor
     @Getter
     public static class Response {
