@@ -2,6 +2,7 @@ package com.courseori.server.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 public class MemberDto {
     @Getter
@@ -14,6 +15,7 @@ public class MemberDto {
     }
 
     @Getter
+    @Setter
     @AllArgsConstructor
     public static class Patch{
         private long memberId;
