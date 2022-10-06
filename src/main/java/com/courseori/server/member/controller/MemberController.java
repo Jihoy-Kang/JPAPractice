@@ -18,8 +18,8 @@ import java.util.List;
 @RequestMapping("/v1/members")
 public class MemberController {
 
-    MemberService memberService;
-    MemberMapper mapper;
+    private final MemberService memberService;
+    private final MemberMapper mapper;
 
     public MemberController(MemberService memberService, MemberMapper mapper) {
         this.memberService = memberService;
