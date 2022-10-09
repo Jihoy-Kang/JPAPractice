@@ -1,8 +1,11 @@
 package com.courseori.server.member.dto;
 
+import com.courseori.server.item.entity.Item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 public class MemberDto {
     @Getter
@@ -31,6 +34,7 @@ public class MemberDto {
         private String email;
         private String name;
         private String phone;
+        private List<Item> itemList;
 
     }
 }
