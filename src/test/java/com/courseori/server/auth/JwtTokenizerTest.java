@@ -25,7 +25,7 @@ class JwtTokenizerTest {
 
     //스트에 사용할 Secret Key를 Base64 형식으로 인코딩 한 후, 인코딩 된 Secret Key를 각 테스트 케이스에서 사용합니다.
     @BeforeAll
-    public void init(){
+    public void init() {
         jwtTokenizer = new JwtTokenizer();
         secretKey = "kevin1234123412341234123412341234";
         base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(secretKey);
@@ -42,7 +42,7 @@ class JwtTokenizerTest {
     @Test
     void generateAccessToken() {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("memberId",1);
+        claims.put("memberId", 1);
         claims.put("roles", List.of("USER"));
 
         String subject = "test access token";
@@ -50,7 +50,7 @@ class JwtTokenizerTest {
         calendar.add(Calendar.MINUTE, 10);
         Date expiration = calendar.getTime();
 
-        String accessToken = jwtTokenizer.generateAccessToken(claims,subject,expiration,base64EncodedSecretKey);
+        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
         System.out.println(accessToken);
 
         assertThat(accessToken, notNullValue());
