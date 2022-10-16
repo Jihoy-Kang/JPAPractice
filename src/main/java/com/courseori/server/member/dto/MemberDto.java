@@ -13,6 +13,7 @@ public class MemberDto {
     public static class Post {
 
         private String email;
+        private String password;
         private String name;
         private String phone;
     }

@@ -1,5 +1,6 @@
 package com.courseori.server.member.service;
 
+import com.courseori.server.auth.utils.CustomAuthorityUtils;
 import com.courseori.server.exception.BusinessLogicException;
 import com.courseori.server.exception.ExceptionCode;
 import com.courseori.server.member.entity.Member;
@@ -7,9 +8,12 @@ import com.courseori.server.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 import javax.swing.plaf.PanelUI;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -17,14 +21,28 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
+    private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
+
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
         this.memberRepository = memberRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authorityUtils = authorityUtils;
     }
 
     public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
+
+        //password 암호화
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        //암호화된 password 세팅
+        member.setPassword(encryptedPassword);
+
+        //DB에 User Role 저장
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
+
         Member savedMember = memberRepository.save(member);
-        // 추가된 부분
         return savedMember;
     }
 
