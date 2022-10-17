@@ -1,5 +1,6 @@
 package com.courseori.server.auth;
 
+import com.courseori.server.auth.jwt.JwtTokenizer;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.io.Decoders;
 import org.junit.jupiter.api.BeforeAll;
@@ -58,13 +59,13 @@ class JwtTokenizerTest {
 
     // JwtTokenizer가 Refresh Token을 정상적으로 생성하는지 테스트 합니다.
     @Test
-    void generateFreshToken() {
+    void generateRefreshToken() {
         String subject = "test refresh token";
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR, 24);
         Date expiration = calendar.getTime();
 
-        String refreshToken = jwtTokenizer.generateFreshToken(subject, expiration, base64EncodedSecretKey);
+        String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
         System.out.println(refreshToken);
 
         assertThat(refreshToken, notNullValue());

@@ -10,6 +10,12 @@ spring:
       ddl-auto: create
     show-sql: true
 
+jwt:
+  key:
+    secret:{JWT_SECRET_KEY} #JWT의 서명에 사용되는 Secret Key 정보는 민감한(sensitive) 정보이므로 시스템 환경 변수의 변수로 등록
+  access-token-expiration-minutes : 30
+  refresh-token-expiration-minutes : 420
+
 mail:
   address:
     admin: admin@gmail.com
