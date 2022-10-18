@@ -33,8 +33,9 @@ public class MemberDetailsService implements UserDetailsService {
         return new MemberDetails(findMember);
     }
 
-    private final class MemberDetails extends Member implements UserDetails{
-        MemberDetails(Member member){
+    private final class MemberDetails extends Member implements UserDetails {
+        // (1)
+        MemberDetails(Member member) {
             setMemberId(member.getMemberId());
             setEmail(member.getEmail());
             setPassword(member.getPassword());
@@ -42,32 +43,32 @@ public class MemberDetailsService implements UserDetailsService {
         }
 
         @Override
-        public Collection<? extends GrantedAuthority> getAuthorities(){
+        public Collection<? extends GrantedAuthority> getAuthorities() {
             return authorityUtils.createAuthorities(this.getRoles());
         }
 
         @Override
-        public String getUsername(){
+        public String getUsername() {
             return getEmail();
         }
 
         @Override
-        public boolean isAccountNonExpired(){
+        public boolean isAccountNonExpired() {
             return true;
         }
 
         @Override
-        public boolean isAccountNonLocked(){
+        public boolean isAccountNonLocked() {
             return true;
         }
 
         @Override
-        public boolean isCredentialsNonExpired(){
+        public boolean isCredentialsNonExpired() {
             return true;
         }
 
         @Override
-        public boolean isEnabled(){
+        public boolean isEnabled() {
             return true;
         }
     }
