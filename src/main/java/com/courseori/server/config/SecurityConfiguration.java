@@ -1,11 +1,14 @@
 package com.courseori.server.config;
 
 import com.courseori.server.auth.filter.JwtAuthenticationFilter;
+import com.courseori.server.auth.handler.MemberAuthenticationFailureHandler;
+import com.courseori.server.auth.handler.MemberAuthenticationSuccessHandler;
 import com.courseori.server.auth.jwt.JwtTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -20,6 +23,7 @@ import java.util.Arrays;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity(debug = true)
 public class SecurityConfiguration {
 
     private final JwtTokenizer jwtTokenizer;
@@ -64,14 +68,15 @@ public class SecurityConfiguration {
     }
 
     //CustomFilterConfigurer는 우리가 구현한 JwtAuthenticationFilter를 등록하는 역할
-    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity >{ //AbstractHttpConfigurer를 상속해서 Custom Configurer를 구현할 수 있습니다
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> { //AbstractHttpConfigurer를 상속해서 Custom Configurer를 구현할 수 있습니다
         @Override
         public void configure(HttpSecurity builder) throws Exception{ //(2-2)와 같이 configure() 메서드를 오버라이드해서 Configuration을 커스터마이징할 수 있습니다.
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class); //getSharedObject(AuthenticationManager.class)를 통해 AuthenticationManager의 객체를 얻을 수 있습니다.
             //getSharedObject() 를 통해서 Spring Security의 설정을 구성하는 SecurityConfigurer 간에 공유되는 객체를 얻을 수 있습니다.
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer); // JwtAuthenticationFilter에서 사용되는 AuthenticationManager와 JwtTokenizer를 DI 해줍니다.
-            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login"); //setFilterProcessesUrl() 메서드를 통해 디폴트 request URL인 “/login”을 “/auth/login”으로 변경합니다.
-
+            jwtAuthenticationFilter.setFilterProcessesUrl("/v1/auth/login"); //setFilterProcessesUrl() 메서드를 통해 디폴트 request URL인 “/login”을 “/auth/login”으로 변경합니다.
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
             builder.addFilter(jwtAuthenticationFilter); //JwtAuthenticationFilter를 Spring Security Filter Chain에 추가
         }
     }

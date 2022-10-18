@@ -39,6 +39,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -65,11 +66,11 @@ class MemberControllerTest {
     @Test
     public void postMember() throws Exception {
         //given
-        MemberDto.Post post = new MemberDto.Post("email@gmail.com","name","010-1234-1234");
+        MemberDto.Post post = new MemberDto.Post("email@gmail.com", "1234","name","010-1234-1234");
 
         String content = gson.toJson(post);
 
-        MemberDto.Response response = new MemberDto.Response(1l,"email@gmail.com","name","010-1234-1234");
+        MemberDto.Response response = StubData.MockMember.getSingleResponseBody();
 
         given(mapper.memberPostToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
         given(memberService.createMember(Mockito.any(Member.class))).willReturn(new Member());
@@ -78,6 +79,7 @@ class MemberControllerTest {
         ResultActions actions =
                 mockMvc.perform(
                         RestDocumentationRequestBuilders.post("/v1/members")
+                                .with(csrf())
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content));
@@ -120,7 +122,7 @@ class MemberControllerTest {
 
         String content = gson.toJson(patch);
 
-        MemberDto.Response response = new MemberDto.Response(1l,"email@gmail.com","name","010-1234-1234");
+        MemberDto.Response response = StubData.MockMember.getSingleResponseBody();
 
         given(mapper.memberPatchToMember(Mockito.any(MemberDto.Patch.class))).willReturn(new Member());
         given(memberService.updateMember(Mockito.any(Member.class))).willReturn(new Member());
@@ -128,6 +130,7 @@ class MemberControllerTest {
 
         ResultActions actions =  mockMvc.perform(
                 RestDocumentationRequestBuilders.patch("/v1/members/{member-id}", memberId)
+                        .with(csrf())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
@@ -167,7 +170,7 @@ class MemberControllerTest {
     @Test
     public void getMember() throws Exception {
         long memberId = 1L;
-        MemberDto.Response response = new MemberDto.Response(1l,"email@gmail.com","name","010-1234-1234");
+        MemberDto.Response response = StubData.MockMember.getSingleResponseBody();
 
         given(memberService.findMember(Mockito.anyLong())).willReturn(new Member());
         given(mapper.memberToMemberResponse(Mockito.any(Member.class))).willReturn(response);
@@ -211,8 +214,8 @@ class MemberControllerTest {
         queryParams.add("page",page);
         queryParams.add("size",size);
 
-        Member member1 = new Member("hgd@gmail.com", "Hong Gildong", "010-1234-1234");
-        Member member2 = new Member("hgd2@gmail.com", "Hong Gildong2", "010-1234-1235");
+        Member member1 = new Member("hgd@gmail.com","Hong Gildong", "010-1234-1234", "1234");
+        Member member2 = new Member("hgd2@gmail.com", "Hong Gildong2", "010-1234-1235", "1234");
 
         Page<Member> members = new PageImpl<>(List.of(member1,member2),
                 PageRequest.of(0,10, Sort.by("member-Id").descending()), 2);
